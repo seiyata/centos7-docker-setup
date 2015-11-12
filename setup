@@ -94,6 +94,7 @@ systemctl enable docker
 
 # Create docker user (docker group already exists as maybe created by yum)
 useradd docker -g docker
+passwd -u -f docker
 
 # Create .ssh directory and authorized_keys file inside for docker
 mkdir -m 700 /home/docker/.ssh
