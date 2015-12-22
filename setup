@@ -87,7 +87,7 @@ gpgkey=https://yum.dockerproject.org/gpg
 EOF
 
 # Install docker using yum
-yum install -y docker-engine
+yum install -y docker-engine docker-python
 
 # Set docker service to start at server boot
 systemctl enable docker
