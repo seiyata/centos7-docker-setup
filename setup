@@ -110,7 +110,7 @@ systemctl start docker
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Install python dev packages
-yum install python-devel python-setuptools
+yum install python-devel python-setuptools -y
 
 # Install pipy
 sudo easy_install pip
