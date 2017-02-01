@@ -15,6 +15,7 @@ Setup script for CentOS7 with Docker
 $ vi setup
 
 (Paste the content of "setup")
+```
 
 3. Grant execution permission to setup
 
