@@ -17,7 +17,7 @@ $ vi setup
 (Paste the content of "setup")
 ```
 
-### 3. Grant execution permission to setup
+### 3. Grant execution permission to the script
 
 ```
 $ chmod u+x setup
