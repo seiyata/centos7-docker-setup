@@ -113,7 +113,7 @@ systemctl start docker
 yum install python-devel python-setuptools -y
 
 # Install pipy
-sudo easy_install pip
+easy_install pip
 
 # Install docker compose
 pip install docker-compose
