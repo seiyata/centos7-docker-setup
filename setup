@@ -13,6 +13,15 @@
 #   Access Control
 #-----------------------------------------------------------------------------------------------------------------------
 
+# Prompt hostname
+echo -n "Hostname (Optional): "
+read hostname
+
+# Update hostname with input name
+if [ -n $hostname ]; then
+    hostnamectl set-hostname $hostname
+fi
+
 # Prompt admin user
 echo -n "Admin User ID: "
 read admin_id
