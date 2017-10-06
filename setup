@@ -6,7 +6,7 @@
 #       ./setup
 #
 #   DESCRIPTION:
-#       Setup script for CentOS7 with Docker
+#       Setup script for CentOS7 with Docker (Community Edition)
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -75,19 +75,16 @@ firewall-cmd --reload
 # Update yum packages
 yum update -y
 
-# Register docker official yum repository
+# Install required packages. yum-utils provides the yum-config-manager utility, and device-mapper-persistent-data and
+# lvm2 are required by the devicemapper storage driver.
+yum install -y yum-utils device-mapper-persistent-data lvm2
+
+# Register docker official stable yum repository
 # (Docker can also be downloaded as "docker" package from extras repo, but it might be old version.)
-cat >/etc/yum.repos.d/docker.repo <<-EOF
-[dockerrepo]
-name=Docker Repository
-baseurl=https://yum.dockerproject.org/repo/main/centos/7
-enabled=1
-gpgcheck=1
-gpgkey=https://yum.dockerproject.org/gpg
-EOF
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
 # Install docker using yum
-yum install -y docker-engine docker-python
+yum install -y docker-ce
 
 # Set docker service to start at server boot
 systemctl enable docker
