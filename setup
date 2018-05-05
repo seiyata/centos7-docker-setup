@@ -35,6 +35,7 @@ echo -e "\n"
 
 # Create the user and set password
 if [ -n $admin_id -a -n $admin_pass -a $admin_pass = $admin_pass_confirm ]; then
+    echo 'Adding admin user...'
     useradd $admin_id
     echo "$admin_id:$admin_pass" | chpasswd
 else
@@ -43,26 +44,32 @@ else
 fi
 
 # Create .ssh directory and authorized_keys file inside
+echo 'Creating .ssh directory for admin user...'
 mkdir -m 700 /home/$admin_id/.ssh
 touch /home/$admin_id/.ssh/authorized_keys; chmod 600 /home/$admin_id/.ssh/authorized_keys
 chown -R $admin_id:$admin_id /home/$admin_id/.ssh
 
 # Add the admin user to wheel group
+echo 'Adding admin user to wheel group...'
 usermod -G wheel $admin_id
 
 # Allow wheel group to use sudo command (Recommend to use visudo interactively instead of sed...)
+echo 'Allowing wheel group to use sudo command...'
 sed -i 's/^#\s*\(%wheel\s*ALL=(ALL)$\)/\1/' /etc/sudoers
 
 # Restrict su command to wheel group
+echo 'Restricting su command to wheel group...'
 echo 'SU_WHEEL_ONLY yes' >> /etc/login.defs
 sed -i 's/^#\s*\(auth\s*required\s*pam_wheel.so\s*use_uid\)/\1/' /etc/pam.d/su
 
 # Forbid login as root or using password (Force public key authentication)
+echo 'Forbidding login as root or using password...'
 sed -i 's/^#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
 sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 systemctl restart sshd
 
 # Disable SELinux
+echo 'Disabling SELinux...'
 setenforce 0
 sed -i 's/^SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 
@@ -72,6 +79,7 @@ sed -i 's/^SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Open http (80) and https (443) ports
+echo 'Opening http (80) and https (443) ports...'
 firewall-cmd --permanent --zone=public --add-service=http 
 firewall-cmd --permanent --zone=public --add-service=https
 firewall-cmd --reload
@@ -80,6 +88,8 @@ firewall-cmd --reload
 #-----------------------------------------------------------------------------------------------------------------------
 #   Setup Docker
 #-----------------------------------------------------------------------------------------------------------------------
+
+echo 'Installing Docker CE and starting service...'
 
 # Update yum packages
 yum update -y
@@ -114,6 +124,8 @@ systemctl start docker
 #-----------------------------------------------------------------------------------------------------------------------
 #   Setup Docker Compose
 #-----------------------------------------------------------------------------------------------------------------------
+
+echo 'Installing Docker Compose...'
 
 # Install python dev packages
 yum install python-devel python-setuptools -y
